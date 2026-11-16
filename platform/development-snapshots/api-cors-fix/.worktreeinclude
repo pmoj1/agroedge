@@ -1,0 +1,12 @@
+# Files copied into every new Claude Code worktree.
+# Uses .gitignore syntax. Only gitignored files that match are copied,
+# so tracked files are never duplicated.
+#
+# Without this, every new worktree starts with no credentials and the
+# agent cannot run anything.
+
+.env
+.env.local
+services/api/.env
+services/integrations/.env
+apps/mobile/android/local.properties

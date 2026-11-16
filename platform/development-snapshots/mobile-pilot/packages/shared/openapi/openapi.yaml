@@ -1,0 +1,1787 @@
+openapi: 3.1.0
+
+info:
+  title: AgroEdge API
+  version: 0.1.0
+  license:
+    name: Proprietary
+  description: >
+    Contract for the AgroEdge Fastify API (services/api). Covers the 14
+    farmer-owned resource tables defined in
+    db/migrations/20260710000000_init_schema_up.sql. Every operation below is
+    scoped to the authenticated user, mirroring the Postgres row-level
+    security policies created in that same migration -- the API never
+    exposes another user's rows. This is a working MVP contract, not a
+    finished public API, and will change by pull request only (see
+    packages/shared/CLAUDE.md).
+
+    `owner_user` is used as the farmer identifier throughout this contract,
+    matching the current schema. A pseudonymous-identifier split is a known
+    gap tracked separately (see db/CLAUDE.md) and is not reflected here yet.
+
+servers:
+  - url: http://localhost:3000
+    description: >
+      Local development (services/api). Production URLs are environment
+      configuration, not committed here.
+
+security:
+  - supabaseAuth: []
+
+tags:
+  - name: Farm Profiles
+    description: Farmer-submitted farm metadata -- size, location, crops grown. A farmer may have more than one.
+  - name: Activities
+    description: Logged farm activities (planting, spraying, harvest, etc.) tied to a crop and date.
+  - name: Activity Files
+    description: Photo, receipt, or document attachments, nested under the activity they belong to.
+  - name: Expenses
+    description: Farmer-logged input costs, scoped to a season.
+  - name: Income Records
+    description: Farmer-logged sales and revenue, scoped to a season.
+  - name: Season Budgets
+    description: Per-season budget targets by category.
+  - name: AI Crop Plans
+    description: AI agronomist crop recommendations generated for a farmer.
+  - name: AI Insights
+    description: AI-generated insights surfaced to a farmer, grouped by category.
+  - name: AI Messages
+    description: Chat log between a farmer and the AI agronomist.
+  - name: Communication Preferences
+    description: Per-farmer notification channel opt-ins (email, SMS, WhatsApp, in-app).
+  - name: Notifications
+    description: Notifications queued or delivered to a farmer.
+  - name: Notification Delivery Logs
+    description: Delivery attempts and outcomes for a notification, nested under it.
+  - name: Reminders
+    description: Scheduled reminders for a farmer, optionally linked to an activity.
+  - name: Weekly Reports
+    description: Weekly summary reports generated for a farmer.
+
+paths:
+  # ---------------------------------------------------------------------
+  # farm_profiles
+  # ---------------------------------------------------------------------
+  /farm-profiles:
+    get:
+      tags: [Farm Profiles]
+      operationId: listFarmProfiles
+      summary: List the authenticated farmer's farm profiles.
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/FarmProfileListResponse'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+    post:
+      tags: [Farm Profiles]
+      operationId: createFarmProfile
+      summary: Create a farm profile owned by the authenticated farmer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FarmProfileCreate'}
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/FarmProfile'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+  /farm-profiles/{id}:
+    get:
+      tags: [Farm Profiles]
+      operationId: getFarmProfile
+      summary: Get a farm profile by ID.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/FarmProfile'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    patch:
+      tags: [Farm Profiles]
+      operationId: updateFarmProfile
+      summary: Update a farm profile.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/FarmProfileCreate'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/FarmProfile'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    delete:
+      tags: [Farm Profiles]
+      operationId: deleteFarmProfile
+      summary: Hard-delete a farm profile.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '204': {description: Deleted}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+
+  # ---------------------------------------------------------------------
+  # activities
+  # ---------------------------------------------------------------------
+  /activities:
+    get:
+      tags: [Activities]
+      operationId: listActivities
+      summary: List the authenticated farmer's activities.
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/ActivityListResponse'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+    post:
+      tags: [Activities]
+      operationId: createActivity
+      summary: Create an activity owned by the authenticated farmer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ActivityCreate'}
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Activity'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+  /activities/{id}:
+    get:
+      tags: [Activities]
+      operationId: getActivity
+      summary: Get an activity by ID.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Activity'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    patch:
+      tags: [Activities]
+      operationId: updateActivity
+      summary: Update an activity.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ActivityUpdate'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Activity'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    delete:
+      tags: [Activities]
+      operationId: deleteActivity
+      summary: Hard-delete an activity.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '204': {description: Deleted}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+
+  # ---------------------------------------------------------------------
+  # activity_files (nested under activities -- RLS is scoped via a join to
+  # the parent activity's owner_user, not a direct owner_user column)
+  # ---------------------------------------------------------------------
+  /activities/{activityId}/files:
+    get:
+      tags: [Activity Files]
+      operationId: listActivityFiles
+      summary: List files attached to an activity.
+      parameters:
+        - $ref: '#/components/parameters/ActivityIdParam'
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/ActivityFileListResponse'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    post:
+      tags: [Activity Files]
+      operationId: createActivityFile
+      summary: Attach a file to an activity.
+      parameters:
+        - $ref: '#/components/parameters/ActivityIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ActivityFileCreate'}
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/ActivityFile'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+  /activities/{activityId}/files/{id}:
+    get:
+      tags: [Activity Files]
+      operationId: getActivityFile
+      summary: Get a single activity file by ID.
+      parameters:
+        - $ref: '#/components/parameters/ActivityIdParam'
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/ActivityFile'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    patch:
+      tags: [Activity Files]
+      operationId: updateActivityFile
+      summary: Update an activity file.
+      parameters:
+        - $ref: '#/components/parameters/ActivityIdParam'
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ActivityFileUpdate'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/ActivityFile'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    delete:
+      tags: [Activity Files]
+      operationId: deleteActivityFile
+      summary: Hard-delete an activity file.
+      parameters:
+        - $ref: '#/components/parameters/ActivityIdParam'
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '204': {description: Deleted}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+
+  # ---------------------------------------------------------------------
+  # expenses
+  # ---------------------------------------------------------------------
+  /expenses:
+    get:
+      tags: [Expenses]
+      operationId: listExpenses
+      summary: List the authenticated farmer's expenses.
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/ExpenseListResponse'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+    post:
+      tags: [Expenses]
+      operationId: createExpense
+      summary: Create an expense owned by the authenticated farmer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ExpenseCreate'}
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Expense'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+  /expenses/{id}:
+    get:
+      tags: [Expenses]
+      operationId: getExpense
+      summary: Get an expense by ID.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Expense'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    patch:
+      tags: [Expenses]
+      operationId: updateExpense
+      summary: Update an expense.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ExpenseUpdate'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Expense'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    delete:
+      tags: [Expenses]
+      operationId: deleteExpense
+      summary: Hard-delete an expense.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '204': {description: Deleted}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+
+  # ---------------------------------------------------------------------
+  # income_records
+  # ---------------------------------------------------------------------
+  /income-records:
+    get:
+      tags: [Income Records]
+      operationId: listIncomeRecords
+      summary: List the authenticated farmer's income records.
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/IncomeRecordListResponse'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+    post:
+      tags: [Income Records]
+      operationId: createIncomeRecord
+      summary: Create an income record owned by the authenticated farmer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/IncomeRecordCreate'}
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/IncomeRecord'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+  /income-records/{id}:
+    get:
+      tags: [Income Records]
+      operationId: getIncomeRecord
+      summary: Get an income record by ID.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/IncomeRecord'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    patch:
+      tags: [Income Records]
+      operationId: updateIncomeRecord
+      summary: Update an income record.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/IncomeRecordUpdate'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/IncomeRecord'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    delete:
+      tags: [Income Records]
+      operationId: deleteIncomeRecord
+      summary: Hard-delete an income record.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '204': {description: Deleted}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+
+  # ---------------------------------------------------------------------
+  # season_budgets
+  # ---------------------------------------------------------------------
+  /season-budgets:
+    get:
+      tags: [Season Budgets]
+      operationId: listSeasonBudgets
+      summary: List the authenticated farmer's season budgets.
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SeasonBudgetListResponse'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+    post:
+      tags: [Season Budgets]
+      operationId: createSeasonBudget
+      summary: Create a season budget owned by the authenticated farmer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/SeasonBudgetCreate'}
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SeasonBudget'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+  /season-budgets/{id}:
+    get:
+      tags: [Season Budgets]
+      operationId: getSeasonBudget
+      summary: Get a season budget by ID.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SeasonBudget'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    patch:
+      tags: [Season Budgets]
+      operationId: updateSeasonBudget
+      summary: Update a season budget.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/SeasonBudgetUpdate'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SeasonBudget'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    delete:
+      tags: [Season Budgets]
+      operationId: deleteSeasonBudget
+      summary: Hard-delete a season budget.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '204': {description: Deleted}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+
+  # ---------------------------------------------------------------------
+  # ai_crop_plans
+  # ---------------------------------------------------------------------
+  /ai-crop-plans:
+    get:
+      tags: [AI Crop Plans]
+      operationId: listAiCropPlans
+      summary: List the authenticated farmer's AI crop plans.
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/AiCropPlanListResponse'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+    post:
+      tags: [AI Crop Plans]
+      operationId: createAiCropPlan
+      summary: Create an AI crop plan owned by the authenticated farmer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/AiCropPlanCreate'}
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/AiCropPlan'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+  /ai-crop-plans/{id}:
+    get:
+      tags: [AI Crop Plans]
+      operationId: getAiCropPlan
+      summary: Get an AI crop plan by ID.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/AiCropPlan'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    patch:
+      tags: [AI Crop Plans]
+      operationId: updateAiCropPlan
+      summary: Update an AI crop plan.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/AiCropPlanCreate'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/AiCropPlan'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    delete:
+      tags: [AI Crop Plans]
+      operationId: deleteAiCropPlan
+      summary: Hard-delete an AI crop plan.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '204': {description: Deleted}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+
+  # ---------------------------------------------------------------------
+  # ai_insights
+  # ---------------------------------------------------------------------
+  /ai-insights:
+    get:
+      tags: [AI Insights]
+      operationId: listAiInsights
+      summary: List the authenticated farmer's AI insights.
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/AiInsightListResponse'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+    post:
+      tags: [AI Insights]
+      operationId: createAiInsight
+      summary: Create an AI insight owned by the authenticated farmer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/AiInsightCreate'}
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/AiInsight'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+  /ai-insights/{id}:
+    get:
+      tags: [AI Insights]
+      operationId: getAiInsight
+      summary: Get an AI insight by ID.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/AiInsight'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    patch:
+      tags: [AI Insights]
+      operationId: updateAiInsight
+      summary: Update an AI insight.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/AiInsightCreate'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/AiInsight'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    delete:
+      tags: [AI Insights]
+      operationId: deleteAiInsight
+      summary: Hard-delete an AI insight.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '204': {description: Deleted}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+
+  # ---------------------------------------------------------------------
+  # ai_messages
+  # ---------------------------------------------------------------------
+  /ai-messages:
+    get:
+      tags: [AI Messages]
+      operationId: listAiMessages
+      summary: List the authenticated farmer's AI agronomist chat messages.
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/AiMessageListResponse'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+    post:
+      tags: [AI Messages]
+      operationId: createAiMessage
+      summary: Create an AI agronomist chat message owned by the authenticated farmer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/AiMessageCreate'}
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/AiMessage'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+  /ai-messages/{id}:
+    get:
+      tags: [AI Messages]
+      operationId: getAiMessage
+      summary: Get an AI agronomist chat message by ID.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/AiMessage'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    patch:
+      tags: [AI Messages]
+      operationId: updateAiMessage
+      summary: Update an AI agronomist chat message.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/AiMessageUpdate'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/AiMessage'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    delete:
+      tags: [AI Messages]
+      operationId: deleteAiMessage
+      summary: Hard-delete an AI agronomist chat message.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '204': {description: Deleted}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+
+  # ---------------------------------------------------------------------
+  # communication_preferences (unique per owner_user -- at most one row)
+  # ---------------------------------------------------------------------
+  /communication-preferences:
+    get:
+      tags: [Communication Preferences]
+      operationId: listCommunicationPreferences
+      summary: >
+        List the authenticated farmer's communication preferences. Returns
+        at most one item, since owner_user is unique on this table.
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/CommunicationPreferenceListResponse'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+    post:
+      tags: [Communication Preferences]
+      operationId: createCommunicationPreference
+      summary: Create the authenticated farmer's communication preferences.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/CommunicationPreferenceCreate'}
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/CommunicationPreference'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+  /communication-preferences/{id}:
+    get:
+      tags: [Communication Preferences]
+      operationId: getCommunicationPreference
+      summary: Get a communication preferences record by ID.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/CommunicationPreference'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    patch:
+      tags: [Communication Preferences]
+      operationId: updateCommunicationPreference
+      summary: Update communication preferences.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/CommunicationPreferenceCreate'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/CommunicationPreference'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    delete:
+      tags: [Communication Preferences]
+      operationId: deleteCommunicationPreference
+      summary: Hard-delete communication preferences.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '204': {description: Deleted}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+
+  # ---------------------------------------------------------------------
+  # notifications
+  # ---------------------------------------------------------------------
+  /notifications:
+    get:
+      tags: [Notifications]
+      operationId: listNotifications
+      summary: List the authenticated farmer's notifications.
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/NotificationListResponse'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+    post:
+      tags: [Notifications]
+      operationId: createNotification
+      summary: Create a notification owned by the authenticated farmer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/NotificationCreate'}
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Notification'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+  /notifications/{id}:
+    get:
+      tags: [Notifications]
+      operationId: getNotification
+      summary: Get a notification by ID.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Notification'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    patch:
+      tags: [Notifications]
+      operationId: updateNotification
+      summary: Update a notification.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/NotificationCreate'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Notification'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    delete:
+      tags: [Notifications]
+      operationId: deleteNotification
+      summary: Hard-delete a notification.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '204': {description: Deleted}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+
+  # ---------------------------------------------------------------------
+  # notification_delivery_logs (nested under notifications -- RLS is scoped
+  # via a join to the parent notification's owner_user)
+  # ---------------------------------------------------------------------
+  /notifications/{notificationId}/delivery-logs:
+    get:
+      tags: [Notification Delivery Logs]
+      operationId: listNotificationDeliveryLogs
+      summary: List delivery logs for a notification.
+      parameters:
+        - $ref: '#/components/parameters/NotificationIdParam'
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/NotificationDeliveryLogListResponse'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    post:
+      tags: [Notification Delivery Logs]
+      operationId: createNotificationDeliveryLog
+      summary: Record a delivery attempt for a notification.
+      parameters:
+        - $ref: '#/components/parameters/NotificationIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/NotificationDeliveryLogCreate'}
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/NotificationDeliveryLog'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+  /notifications/{notificationId}/delivery-logs/{id}:
+    get:
+      tags: [Notification Delivery Logs]
+      operationId: getNotificationDeliveryLog
+      summary: Get a single notification delivery log by ID.
+      parameters:
+        - $ref: '#/components/parameters/NotificationIdParam'
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/NotificationDeliveryLog'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    patch:
+      tags: [Notification Delivery Logs]
+      operationId: updateNotificationDeliveryLog
+      summary: Update a notification delivery log.
+      parameters:
+        - $ref: '#/components/parameters/NotificationIdParam'
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/NotificationDeliveryLogUpdate'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/NotificationDeliveryLog'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    delete:
+      tags: [Notification Delivery Logs]
+      operationId: deleteNotificationDeliveryLog
+      summary: Hard-delete a notification delivery log.
+      parameters:
+        - $ref: '#/components/parameters/NotificationIdParam'
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '204': {description: Deleted}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+
+  # ---------------------------------------------------------------------
+  # reminders
+  # ---------------------------------------------------------------------
+  /reminders:
+    get:
+      tags: [Reminders]
+      operationId: listReminders
+      summary: List the authenticated farmer's reminders.
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/ReminderListResponse'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+    post:
+      tags: [Reminders]
+      operationId: createReminder
+      summary: Create a reminder owned by the authenticated farmer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ReminderCreate'}
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Reminder'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+  /reminders/{id}:
+    get:
+      tags: [Reminders]
+      operationId: getReminder
+      summary: Get a reminder by ID.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Reminder'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    patch:
+      tags: [Reminders]
+      operationId: updateReminder
+      summary: Update a reminder.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ReminderUpdate'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Reminder'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    delete:
+      tags: [Reminders]
+      operationId: deleteReminder
+      summary: Hard-delete a reminder.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '204': {description: Deleted}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+
+  # ---------------------------------------------------------------------
+  # weekly_reports
+  # ---------------------------------------------------------------------
+  /weekly-reports:
+    get:
+      tags: [Weekly Reports]
+      operationId: listWeeklyReports
+      summary: List the authenticated farmer's weekly reports.
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/OffsetParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/WeeklyReportListResponse'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+    post:
+      tags: [Weekly Reports]
+      operationId: createWeeklyReport
+      summary: Create a weekly report owned by the authenticated farmer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/WeeklyReportCreate'}
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/WeeklyReport'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+  /weekly-reports/{id}:
+    get:
+      tags: [Weekly Reports]
+      operationId: getWeeklyReport
+      summary: Get a weekly report by ID.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/WeeklyReport'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    patch:
+      tags: [Weekly Reports]
+      operationId: updateWeeklyReport
+      summary: Update a weekly report.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/WeeklyReportCreate'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/WeeklyReport'}
+        '400': {$ref: '#/components/responses/ValidationError'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+    delete:
+      tags: [Weekly Reports]
+      operationId: deleteWeeklyReport
+      summary: Hard-delete a weekly report.
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '204': {description: Deleted}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+
+components:
+  securitySchemes:
+    supabaseAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Supabase Auth JWT. Row-level security policies key off auth.uid().
+
+  parameters:
+    IdParam:
+      name: id
+      in: path
+      required: true
+      schema: {type: string, format: uuid}
+      description: Resource ID.
+    ActivityIdParam:
+      name: activityId
+      in: path
+      required: true
+      schema: {type: string, format: uuid}
+      description: Parent activity ID.
+    NotificationIdParam:
+      name: notificationId
+      in: path
+      required: true
+      schema: {type: string, format: uuid}
+      description: Parent notification ID.
+    LimitParam:
+      name: limit
+      in: query
+      required: false
+      schema: {type: integer, minimum: 1, maximum: 200, default: 50}
+    OffsetParam:
+      name: offset
+      in: query
+      required: false
+      schema: {type: integer, minimum: 0, default: 0}
+
+  responses:
+    Unauthorized:
+      description: Missing or invalid Supabase auth token.
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ApiError'}
+    NotFound:
+      description: >
+        Resource does not exist, or is not owned by the authenticated user
+        (row-level security makes these indistinguishable by design).
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ApiError'}
+    ValidationError:
+      description: Request body failed validation.
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ApiError'}
+
+  schemas:
+    ApiError:
+      type: object
+      required: [message]
+      properties:
+        message: {type: string}
+        code: {type: [string, "null"]}
+
+    # --- farm_profiles ---------------------------------------------------
+    FarmProfile:
+      type: object
+      description: Bubble source table -- FarmProfile.
+      required: [id, owner_user, created_at, updated_at]
+      properties:
+        id: {type: string, format: uuid, readOnly: true}
+        owner_user: {type: string, format: uuid, readOnly: true}
+        farm_name: {type: [string, "null"]}
+        farm_size: {type: [number, "null"]}
+        farm_type: {type: [string, "null"]}
+        country: {type: [string, "null"]}
+        region: {type: [string, "null"]}
+        gps_lat: {type: [number, "null"]}
+        gps_lng: {type: [number, "null"]}
+        primary_crop: {type: [string, "null"]}
+        secondary_crop: {type: [string, "null"]}
+        created_at: {type: string, format: date-time, readOnly: true}
+        updated_at: {type: string, format: date-time, readOnly: true}
+    FarmProfileCreate:
+      type: object
+      properties:
+        farm_name: {type: [string, "null"]}
+        farm_size: {type: [number, "null"]}
+        farm_type: {type: [string, "null"]}
+        country: {type: [string, "null"]}
+        region: {type: [string, "null"]}
+        gps_lat: {type: [number, "null"]}
+        gps_lng: {type: [number, "null"]}
+        primary_crop: {type: [string, "null"]}
+        secondary_crop: {type: [string, "null"]}
+    FarmProfileListResponse:
+      type: object
+      required: [data, limit, offset, total]
+      properties:
+        data: {type: array, items: {$ref: '#/components/schemas/FarmProfile'}}
+        limit: {type: integer}
+        offset: {type: integer}
+        total: {type: integer}
+
+    # --- activities --------------------------------------------------------
+    Activity:
+      type: object
+      description: Bubble source table -- Activity.
+      required: [id, owner_user, activity_type, activity_date, created_at, updated_at]
+      properties:
+        id: {type: string, format: uuid, readOnly: true}
+        owner_user: {type: string, format: uuid, readOnly: true}
+        activity_type: {type: string}
+        crop: {type: [string, "null"]}
+        activity_date: {type: string, format: date}
+        gps_lat: {type: [number, "null"]}
+        gps_lng: {type: [number, "null"]}
+        notes: {type: [string, "null"]}
+        season_label: {type: [string, "null"]}
+        yield_quantity: {type: [number, "null"]}
+        yield_unit: {type: [string, "null"]}
+        created_at: {type: string, format: date-time, readOnly: true}
+        updated_at: {type: string, format: date-time, readOnly: true}
+    ActivityCreate:
+      type: object
+      required: [activity_type, activity_date]
+      properties:
+        activity_type: {type: string}
+        crop: {type: [string, "null"]}
+        activity_date: {type: string, format: date}
+        gps_lat: {type: [number, "null"]}
+        gps_lng: {type: [number, "null"]}
+        notes: {type: [string, "null"]}
+        season_label: {type: [string, "null"]}
+        yield_quantity: {type: [number, "null"]}
+        yield_unit: {type: [string, "null"]}
+    ActivityUpdate:
+      type: object
+      properties:
+        activity_type: {type: string}
+        crop: {type: [string, "null"]}
+        activity_date: {type: string, format: date}
+        gps_lat: {type: [number, "null"]}
+        gps_lng: {type: [number, "null"]}
+        notes: {type: [string, "null"]}
+        season_label: {type: [string, "null"]}
+        yield_quantity: {type: [number, "null"]}
+        yield_unit: {type: [string, "null"]}
+    ActivityListResponse:
+      type: object
+      required: [data, limit, offset, total]
+      properties:
+        data: {type: array, items: {$ref: '#/components/schemas/Activity'}}
+        limit: {type: integer}
+        offset: {type: integer}
+        total: {type: integer}
+
+    # --- activity_files ------------------------------------------------
+    ActivityFile:
+      type: object
+      description: >
+        Bubble source table -- ActivityFile. Used as the "photo"/"receipt"/
+        "document" attachment type across Activity, Expense and
+        IncomeRecord. RLS is scoped via a join to the parent activity's
+        owner_user, not a direct owner_user column on this table.
+      required: [id, activity_id, storage_path, created_at]
+      properties:
+        id: {type: string, format: uuid, readOnly: true}
+        activity_id: {type: string, format: uuid, readOnly: true}
+        storage_path: {type: string, description: "Supabase Storage object path, not a public URL."}
+        file_type: {type: [string, "null"]}
+        created_at: {type: string, format: date-time, readOnly: true}
+    ActivityFileCreate:
+      type: object
+      required: [storage_path]
+      properties:
+        storage_path: {type: string, description: "Supabase Storage object path, not a public URL."}
+        file_type: {type: [string, "null"]}
+    ActivityFileUpdate:
+      type: object
+      properties:
+        storage_path: {type: string, description: "Supabase Storage object path, not a public URL."}
+        file_type: {type: [string, "null"]}
+    ActivityFileListResponse:
+      type: object
+      required: [data, limit, offset, total]
+      properties:
+        data: {type: array, items: {$ref: '#/components/schemas/ActivityFile'}}
+        limit: {type: integer}
+        offset: {type: integer}
+        total: {type: integer}
+
+    # --- expenses -----------------------------------------------------
+    Expense:
+      type: object
+      description: Bubble source table -- Expense.
+      required: [id, owner_user, amount, expense_date, created_at, updated_at]
+      properties:
+        id: {type: string, format: uuid, readOnly: true}
+        owner_user: {type: string, format: uuid, readOnly: true}
+        amount: {type: number}
+        category: {type: [string, "null"]}
+        expense_date: {type: string, format: date}
+        notes: {type: [string, "null"]}
+        season_label: {type: [string, "null"]}
+        receipt_file_id: {type: [string, "null"], format: uuid}
+        created_at: {type: string, format: date-time, readOnly: true}
+        updated_at: {type: string, format: date-time, readOnly: true}
+    ExpenseCreate:
+      type: object
+      required: [amount, expense_date]
+      properties:
+        amount: {type: number}
+        category: {type: [string, "null"]}
+        expense_date: {type: string, format: date}
+        notes: {type: [string, "null"]}
+        season_label: {type: [string, "null"]}
+        receipt_file_id: {type: [string, "null"], format: uuid}
+    ExpenseUpdate:
+      type: object
+      properties:
+        amount: {type: number}
+        category: {type: [string, "null"]}
+        expense_date: {type: string, format: date}
+        notes: {type: [string, "null"]}
+        season_label: {type: [string, "null"]}
+        receipt_file_id: {type: [string, "null"], format: uuid}
+    ExpenseListResponse:
+      type: object
+      required: [data, limit, offset, total]
+      properties:
+        data: {type: array, items: {$ref: '#/components/schemas/Expense'}}
+        limit: {type: integer}
+        offset: {type: integer}
+        total: {type: integer}
+
+    # --- income_records -------------------------------------------------
+    IncomeRecord:
+      type: object
+      description: Bubble source table -- IncomeRecord.
+      required: [id, owner_user, income_date, created_at, updated_at]
+      properties:
+        id: {type: string, format: uuid, readOnly: true}
+        owner_user: {type: string, format: uuid, readOnly: true}
+        crop: {type: [string, "null"]}
+        buyer: {type: [string, "null"]}
+        income_date: {type: string, format: date}
+        price_per_unit: {type: [number, "null"]}
+        quantity_sold: {type: [number, "null"]}
+        total_revenue: {type: [number, "null"]}
+        season_label: {type: [string, "null"]}
+        document_file_id: {type: [string, "null"], format: uuid}
+        created_at: {type: string, format: date-time, readOnly: true}
+        updated_at: {type: string, format: date-time, readOnly: true}
+    IncomeRecordCreate:
+      type: object
+      required: [income_date]
+      properties:
+        crop: {type: [string, "null"]}
+        buyer: {type: [string, "null"]}
+        income_date: {type: string, format: date}
+        price_per_unit: {type: [number, "null"]}
+        quantity_sold: {type: [number, "null"]}
+        total_revenue: {type: [number, "null"]}
+        season_label: {type: [string, "null"]}
+        document_file_id: {type: [string, "null"], format: uuid}
+    IncomeRecordUpdate:
+      type: object
+      properties:
+        crop: {type: [string, "null"]}
+        buyer: {type: [string, "null"]}
+        income_date: {type: string, format: date}
+        price_per_unit: {type: [number, "null"]}
+        quantity_sold: {type: [number, "null"]}
+        total_revenue: {type: [number, "null"]}
+        season_label: {type: [string, "null"]}
+        document_file_id: {type: [string, "null"], format: uuid}
+    IncomeRecordListResponse:
+      type: object
+      required: [data, limit, offset, total]
+      properties:
+        data: {type: array, items: {$ref: '#/components/schemas/IncomeRecord'}}
+        limit: {type: integer}
+        offset: {type: integer}
+        total: {type: integer}
+
+    # --- season_budgets ------------------------------------------------
+    SeasonBudget:
+      type: object
+      description: Bubble source table -- SeasonBudget.
+      required: [id, owner_user, season_label, budget_amount, created_at, updated_at]
+      properties:
+        id: {type: string, format: uuid, readOnly: true}
+        owner_user: {type: string, format: uuid, readOnly: true}
+        season_label: {type: string}
+        category: {type: [string, "null"]}
+        budget_amount: {type: number}
+        created_at: {type: string, format: date-time, readOnly: true}
+        updated_at: {type: string, format: date-time, readOnly: true}
+    SeasonBudgetCreate:
+      type: object
+      required: [season_label, budget_amount]
+      properties:
+        season_label: {type: string}
+        category: {type: [string, "null"]}
+        budget_amount: {type: number}
+    SeasonBudgetUpdate:
+      type: object
+      properties:
+        season_label: {type: string}
+        category: {type: [string, "null"]}
+        budget_amount: {type: number}
+    SeasonBudgetListResponse:
+      type: object
+      required: [data, limit, offset, total]
+      properties:
+        data: {type: array, items: {$ref: '#/components/schemas/SeasonBudget'}}
+        limit: {type: integer}
+        offset: {type: integer}
+        total: {type: integer}
+
+    # --- ai_crop_plans ----------------------------------------------
+    AiCropPlan:
+      type: object
+      description: Bubble source table -- AiCropPlan.
+      required: [id, owner_user, created_at]
+      properties:
+        id: {type: string, format: uuid, readOnly: true}
+        owner_user: {type: string, format: uuid, readOnly: true}
+        crop: {type: [string, "null"]}
+        priority_action: {type: [string, "null"]}
+        recommendation_text: {type: [string, "null"]}
+        created_at: {type: string, format: date-time, readOnly: true}
+    AiCropPlanCreate:
+      type: object
+      properties:
+        crop: {type: [string, "null"]}
+        priority_action: {type: [string, "null"]}
+        recommendation_text: {type: [string, "null"]}
+    AiCropPlanListResponse:
+      type: object
+      required: [data, limit, offset, total]
+      properties:
+        data: {type: array, items: {$ref: '#/components/schemas/AiCropPlan'}}
+        limit: {type: integer}
+        offset: {type: integer}
+        total: {type: integer}
+
+    # --- ai_insights --------------------------------------------------
+    AiInsight:
+      type: object
+      description: Bubble source table -- AiInsight.
+      required: [id, owner_user, created_at]
+      properties:
+        id: {type: string, format: uuid, readOnly: true}
+        owner_user: {type: string, format: uuid, readOnly: true}
+        category: {type: [string, "null"]}
+        insight_text: {type: [string, "null"]}
+        created_at: {type: string, format: date-time, readOnly: true}
+    AiInsightCreate:
+      type: object
+      properties:
+        category: {type: [string, "null"]}
+        insight_text: {type: [string, "null"]}
+    AiInsightListResponse:
+      type: object
+      required: [data, limit, offset, total]
+      properties:
+        data: {type: array, items: {$ref: '#/components/schemas/AiInsight'}}
+        limit: {type: integer}
+        offset: {type: integer}
+        total: {type: integer}
+
+    # --- ai_messages -----------------------------------------------
+    AiMessage:
+      type: object
+      description: Bubble source table -- AiMessage (chat log with the AI agronomist).
+      required: [id, owner_user, sender, message_text, created_at]
+      properties:
+        id: {type: string, format: uuid, readOnly: true}
+        owner_user: {type: string, format: uuid, readOnly: true}
+        sender: {type: string, enum: [farmer, ai]}
+        message_text: {type: string}
+        created_at: {type: string, format: date-time, readOnly: true}
+    AiMessageCreate:
+      type: object
+      required: [sender, message_text]
+      properties:
+        sender: {type: string, enum: [farmer, ai]}
+        message_text: {type: string}
+    AiMessageUpdate:
+      type: object
+      properties:
+        sender: {type: string, enum: [farmer, ai]}
+        message_text: {type: string}
+    AiMessageListResponse:
+      type: object
+      required: [data, limit, offset, total]
+      properties:
+        data: {type: array, items: {$ref: '#/components/schemas/AiMessage'}}
+        limit: {type: integer}
+        offset: {type: integer}
+        total: {type: integer}
+
+    # --- communication_preferences -----------------------------------
+    CommunicationPreference:
+      type: object
+      description: Bubble source table -- CommunicationPreference. owner_user is unique.
+      required: [id, owner_user, email_enabled, sms_enabled, whatsapp_enabled, in_app_enabled, updated_at]
+      properties:
+        id: {type: string, format: uuid, readOnly: true}
+        owner_user: {type: string, format: uuid, readOnly: true}
+        default_channel: {type: [string, "null"]}
+        notification_type: {type: [string, "null"]}
+        email_enabled: {type: boolean, default: false}
+        sms_enabled: {type: boolean, default: false}
+        whatsapp_enabled: {type: boolean, default: false}
+        in_app_enabled: {type: boolean, default: true}
+        updated_at: {type: string, format: date-time, readOnly: true}
+    CommunicationPreferenceCreate:
+      type: object
+      properties:
+        default_channel: {type: [string, "null"]}
+        notification_type: {type: [string, "null"]}
+        email_enabled: {type: boolean, default: false}
+        sms_enabled: {type: boolean, default: false}
+        whatsapp_enabled: {type: boolean, default: false}
+        in_app_enabled: {type: boolean, default: true}
+    CommunicationPreferenceListResponse:
+      type: object
+      required: [data, limit, offset, total]
+      properties:
+        data: {type: array, items: {$ref: '#/components/schemas/CommunicationPreference'}}
+        limit: {type: integer}
+        offset: {type: integer}
+        total: {type: integer}
+
+    # --- notifications --------------------------------------------------
+    Notification:
+      type: object
+      description: Bubble source table -- Notification.
+      required: [id, owner_user, status, created_at]
+      properties:
+        id: {type: string, format: uuid, readOnly: true}
+        owner_user: {type: string, format: uuid, readOnly: true}
+        notification_type: {type: [string, "null"]}
+        title: {type: [string, "null"]}
+        short_message: {type: [string, "null"]}
+        status: {type: string, enum: [pending, sent, failed, read], default: pending}
+        created_at: {type: string, format: date-time, readOnly: true}
+    NotificationCreate:
+      type: object
+      properties:
+        notification_type: {type: [string, "null"]}
+        title: {type: [string, "null"]}
+        short_message: {type: [string, "null"]}
+        status: {type: string, enum: [pending, sent, failed, read], default: pending}
+    NotificationListResponse:
+      type: object
+      required: [data, limit, offset, total]
+      properties:
+        data: {type: array, items: {$ref: '#/components/schemas/Notification'}}
+        limit: {type: integer}
+        offset: {type: integer}
+        total: {type: integer}
+
+    # --- notification_delivery_logs ----------------------------------
+    NotificationDeliveryLog:
+      type: object
+      description: >
+        Bubble source table -- NotificationDeliveryLog. Delivery metadata
+        only; no message content is duplicated here. RLS is scoped via a
+        join to the parent notification's owner_user, not a direct
+        owner_user column on this table.
+      required: [id, notification_id, channel, delivery_status, created_at]
+      properties:
+        id: {type: string, format: uuid, readOnly: true}
+        notification_id: {type: string, format: uuid, readOnly: true}
+        channel: {type: string}
+        delivery_status: {type: string}
+        delivered_at: {type: [string, "null"], format: date-time}
+        created_at: {type: string, format: date-time, readOnly: true}
+    NotificationDeliveryLogCreate:
+      type: object
+      required: [channel, delivery_status]
+      properties:
+        channel: {type: string}
+        delivery_status: {type: string}
+        delivered_at: {type: [string, "null"], format: date-time}
+    NotificationDeliveryLogUpdate:
+      type: object
+      properties:
+        channel: {type: string}
+        delivery_status: {type: string}
+        delivered_at: {type: [string, "null"], format: date-time}
+    NotificationDeliveryLogListResponse:
+      type: object
+      required: [data, limit, offset, total]
+      properties:
+        data: {type: array, items: {$ref: '#/components/schemas/NotificationDeliveryLog'}}
+        limit: {type: integer}
+        offset: {type: integer}
+        total: {type: integer}
+
+    # --- reminders -----------------------------------------------------
+    Reminder:
+      type: object
+      description: Bubble source table -- Reminder.
+      required: [id, owner_user, reminder_datetime, status, created_at]
+      properties:
+        id: {type: string, format: uuid, readOnly: true}
+        owner_user: {type: string, format: uuid, readOnly: true}
+        related_activity_id: {type: [string, "null"], format: uuid}
+        related_crop: {type: [string, "null"]}
+        title: {type: [string, "null"]}
+        reminder_datetime: {type: string, format: date-time}
+        delivery_channel: {type: [string, "null"]}
+        status: {type: string, enum: [scheduled, sent, dismissed, cancelled], default: scheduled}
+        created_at: {type: string, format: date-time, readOnly: true}
+    ReminderCreate:
+      type: object
+      required: [reminder_datetime]
+      properties:
+        related_activity_id: {type: [string, "null"], format: uuid}
+        related_crop: {type: [string, "null"]}
+        title: {type: [string, "null"]}
+        reminder_datetime: {type: string, format: date-time}
+        delivery_channel: {type: [string, "null"]}
+        status: {type: string, enum: [scheduled, sent, dismissed, cancelled], default: scheduled}
+    ReminderUpdate:
+      type: object
+      properties:
+        related_activity_id: {type: [string, "null"], format: uuid}
+        related_crop: {type: [string, "null"]}
+        title: {type: [string, "null"]}
+        reminder_datetime: {type: string, format: date-time}
+        delivery_channel: {type: [string, "null"]}
+        status: {type: string, enum: [scheduled, sent, dismissed, cancelled], default: scheduled}
+    ReminderListResponse:
+      type: object
+      required: [data, limit, offset, total]
+      properties:
+        data: {type: array, items: {$ref: '#/components/schemas/Reminder'}}
+        limit: {type: integer}
+        offset: {type: integer}
+        total: {type: integer}
+
+    # --- weekly_reports -----------------------------------------------
+    WeeklyReport:
+      type: object
+      description: Bubble source table -- WeeklyReport.
+      required: [id, owner_user, created_at]
+      properties:
+        id: {type: string, format: uuid, readOnly: true}
+        owner_user: {type: string, format: uuid, readOnly: true}
+        report_text: {type: [string, "null"]}
+        delivery_preference: {type: [string, "null"]}
+        created_at: {type: string, format: date-time, readOnly: true}
+    WeeklyReportCreate:
+      type: object
+      properties:
+        report_text: {type: [string, "null"]}
+        delivery_preference: {type: [string, "null"]}
+    WeeklyReportListResponse:
+      type: object
+      required: [data, limit, offset, total]
+      properties:
+        data: {type: array, items: {$ref: '#/components/schemas/WeeklyReport'}}
+        limit: {type: integer}
+        offset: {type: integer}
+        total: {type: integer}

@@ -1,0 +1,10 @@
+{
+  "name": "agroedge-platform",
+  "private": true,
+  "version": "0.0.0",
+  "description": "npm workspace root -- links the Node packages in this repo (packages/shared, services/api) so they can import each other directly. apps/* and services/integrations are Flutter/not-yet-built and are not npm packages, so they're not listed here.",
+  "workspaces": [
+    "packages/shared",
+    "services/api"
+  ]
+}

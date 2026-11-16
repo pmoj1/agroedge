@@ -1,0 +1,39 @@
+name: agroedge_mobile
+description: >
+  AgroEdge farmer app -- scoped-down pilot build (Flutter Web) for 3 known
+  pilot farmers. See apps/mobile/CLAUDE.md for the full offline-first vision
+  this pilot intentionally does not implement yet.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  agroedge_shared:
+    path: ../../packages/shared
+
+  supabase_flutter: ^2.8.0
+  http: ^1.2.2
+  intl: ^0.20.2
+  google_generative_ai: ^0.4.6
+  record: ^5.1.2
+  image_picker: ^1.1.2
+  flutter_markdown: ^0.7.6
+  shared_preferences: ^2.3.2
+  geolocator: ^13.0.2
+  flutter_animate: ^4.5.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  generate: true

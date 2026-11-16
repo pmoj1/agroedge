@@ -1,0 +1,80 @@
+{
+  "@@locale": "pt",
+
+  "appTitle": "AgroEdge",
+  "commonSave": "Guardar",
+  "commonCancel": "Cancelar",
+  "commonSignOut": "Sair",
+  "commonRetry": "Tentar novamente",
+  "commonOptional": "Opcional",
+  "commonSomethingWentWrong": "Algo correu mal. Por favor tente novamente.",
+
+  "signInTitle": "Entrar no AgroEdge",
+  "signInEmailLabel": "Email",
+  "signInPasswordLabel": "Palavra-passe",
+  "signInButton": "Entrar",
+  "signInInvalidCredentials": "Email ou palavra-passe incorretos.",
+  "signInGenericError": "Não foi possível entrar. Por favor tente novamente.",
+
+  "farmSetupTitle": "Configurar a sua quinta",
+  "farmSetupIntro": "Conte-nos um pouco sobre a sua quinta. Só precisa fazer isto uma vez.",
+  "farmSetupFarmNameLabel": "Nome da quinta",
+  "farmSetupFarmSizeLabel": "Tamanho da quinta (hectares)",
+  "farmSetupPrimaryCropLabel": "Cultura principal",
+  "farmSetupRegionLabel": "Região",
+  "farmSetupSaveButton": "Guardar e continuar",
+  "farmSetupRequiredField": "Este campo é obrigatório",
+
+  "homeLogActivity": "Registar actividade",
+  "homeAskAi": "Perguntar ao agrónomo IA",
+  "homeRecentActivities": "Actividades recentes",
+  "homeNoActivitiesYet": "Nenhuma actividade registada.",
+  "homeLogExpense": "Registar despesa",
+  "homeLogIncome": "Registar rendimento",
+
+  "homeAiInsightsHeading": "Insights IA",
+  "homeCropPlanHeading": "Plano de culturas actual",
+  "homeCropPlanEmpty": "Nenhum plano de culturas.",
+  "homeInsightsHeading": "Insights recentes",
+  "homeInsightsEmpty": "Nenhum insight.",
+
+  "activityListItemSubtitle": "{crop} — {date}",
+  "@activityListItemSubtitle": {
+    "placeholders": {
+      "crop": {"type": "String"},
+      "date": {"type": "String"}
+    }
+  },
+
+  "logActivityTitle": "Registar actividade",
+  "logActivityTypeLabel": "Tipo de actividade",
+  "logActivityCropLabel": "Cultura",
+  "logActivityDateLabel": "Data",
+  "logActivityNotesLabel": "Notas",
+  "logActivityYieldQuantityLabel": "Quantidade de produção",
+  "logActivityYieldUnitLabel": "Unidade de produção",
+  "logActivitySavedConfirmation": "Actividade registada.",
+
+  "logExpenseTitle": "Registar despesa",
+  "logExpenseAmountLabel": "Valor",
+  "logExpenseCategoryLabel": "Categoria",
+  "logExpenseDateLabel": "Data",
+  "logExpenseNotesLabel": "Notas",
+  "logExpenseSavedConfirmation": "Despesa registada.",
+
+  "logIncomeTitle": "Registar rendimento",
+  "logIncomeCropLabel": "Cultura",
+  "logIncomeBuyerLabel": "Comprador",
+  "logIncomeDateLabel": "Data",
+  "logIncomePricePerUnitLabel": "Preço por unidade",
+  "logIncomeQuantitySoldLabel": "Quantidade vendida",
+  "logIncomeTotalRevenueLabel": "Rendimento total",
+  "logIncomeSavedConfirmation": "Rendimento registado.",
+
+  "aiChatTitle": "Agrónomo IA",
+  "aiChatComingSoonTitle": "Em breve",
+  "aiChatComingSoonBody": "O agrónomo IA estará disponível em breve.",
+
+  "validationRequired": "Obrigatório",
+  "validationMustBeNumber": "Deve ser um número"
+}

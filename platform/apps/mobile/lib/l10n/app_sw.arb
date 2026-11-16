@@ -1,0 +1,80 @@
+{
+  "@@locale": "sw",
+
+  "appTitle": "AgroEdge",
+  "commonSave": "Hifadhi",
+  "commonCancel": "Ghairi",
+  "commonSignOut": "Toka",
+  "commonRetry": "Jaribu tena",
+  "commonOptional": "Si lazima",
+  "commonSomethingWentWrong": "Kuna tatizo. Tafadhali jaribu tena.",
+
+  "signInTitle": "Ingia AgroEdge",
+  "signInEmailLabel": "Barua pepe",
+  "signInPasswordLabel": "Nywila",
+  "signInButton": "Ingia",
+  "signInInvalidCredentials": "Barua pepe au nywila si sahihi.",
+  "signInGenericError": "Haikuweza kuingia. Tafadhali jaribu tena.",
+
+  "farmSetupTitle": "Weka shamba lako",
+  "farmSetupIntro": "Tuambie kidogo kuhusu shamba lako. Unahitaji kufanya hivi mara moja tu.",
+  "farmSetupFarmNameLabel": "Jina la shamba",
+  "farmSetupFarmSizeLabel": "Ukubwa wa shamba (hekta)",
+  "farmSetupPrimaryCropLabel": "Mazao ya kwanza",
+  "farmSetupRegionLabel": "Mkoa",
+  "farmSetupSaveButton": "Hifadhi na endelea",
+  "farmSetupRequiredField": "Sehemu hii inahitajika",
+
+  "homeLogActivity": "Rekodi shughuli",
+  "homeAskAi": "Uliza mshauri wa AI",
+  "homeRecentActivities": "Shughuli za hivi karibuni",
+  "homeNoActivitiesYet": "Hakuna shughuli bado.",
+  "homeLogExpense": "Rekodi gharama",
+  "homeLogIncome": "Rekodi mapato",
+
+  "homeAiInsightsHeading": "Maoni ya AI",
+  "homeCropPlanHeading": "Mpango wa mazao",
+  "homeCropPlanEmpty": "Hakuna mpango wa mazao bado.",
+  "homeInsightsHeading": "Maoni ya hivi karibuni",
+  "homeInsightsEmpty": "Hakuna maoni bado.",
+
+  "activityListItemSubtitle": "{crop} — {date}",
+  "@activityListItemSubtitle": {
+    "placeholders": {
+      "crop": {"type": "String"},
+      "date": {"type": "String"}
+    }
+  },
+
+  "logActivityTitle": "Rekodi shughuli",
+  "logActivityTypeLabel": "Aina ya shughuli",
+  "logActivityCropLabel": "Zao",
+  "logActivityDateLabel": "Tarehe",
+  "logActivityNotesLabel": "Maelezo",
+  "logActivityYieldQuantityLabel": "Kiasi cha mavuno",
+  "logActivityYieldUnitLabel": "Kipimo cha mavuno",
+  "logActivitySavedConfirmation": "Shughuli imerekidiwa.",
+
+  "logExpenseTitle": "Rekodi gharama",
+  "logExpenseAmountLabel": "Kiasi",
+  "logExpenseCategoryLabel": "Kategoria",
+  "logExpenseDateLabel": "Tarehe",
+  "logExpenseNotesLabel": "Maelezo",
+  "logExpenseSavedConfirmation": "Gharama imerekidiwa.",
+
+  "logIncomeTitle": "Rekodi mapato",
+  "logIncomeCropLabel": "Zao",
+  "logIncomeBuyerLabel": "Mnunuzi",
+  "logIncomeDateLabel": "Tarehe",
+  "logIncomePricePerUnitLabel": "Bei kwa kipimo",
+  "logIncomeQuantitySoldLabel": "Kiasi kilichouzwa",
+  "logIncomeTotalRevenueLabel": "Mapato yote",
+  "logIncomeSavedConfirmation": "Mapato yamerekidiwa.",
+
+  "aiChatTitle": "Mshauri wa AI",
+  "aiChatComingSoonTitle": "Inakuja hivi karibuni",
+  "aiChatComingSoonBody": "Mshauri wa AI atapatikana hivi karibuni.",
+
+  "validationRequired": "Inahitajika",
+  "validationMustBeNumber": "Lazima iwe nambari"
+}

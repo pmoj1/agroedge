@@ -1,0 +1,17 @@
+﻿Feature,Notes,Owner,Phase,Priority,Status
+Offline mode,Local storage + sync,CTO,v2,P2,🔲 Backlog
+Activity logger,"Planting, watering, fertilising, harvesting",CTO,v1,P0,🔲 To do
+AI weekly insight,"""Your maize cost is 20% above avg""",CTO,v1,P0,🔲 To do
+Cost optimisation tips,AI-generated recommendations,CEO,v2,P1,🔲 Backlog
+Satellite imagery,Remote crop monitoring and land health analysis,CTO,v3,P2,🔲 Backlog
+Weather integration,Location-based weather alerts and planting guidance,CTO,v2,P1,🔲 Backlog
+Multi-crop support,Handle mixed farms,CTO,v3,P2,🔲 Backlog
+Farmer onboarding & profile,"Name, location, crops, farm size",CTO,v1,P0,🔲 To do
+Admin dashboard,For NGO/agri-extension partners,CEO,v2,P2,🔲 Backlog
+SMS / USSD alerts,Africa's Talking API,CTO,v2,P1,🔲 Backlog
+Expense tracker,"Seeds, labour, tools, transport",CTO,v1,P0,🔲 To do
+WhatsApp support,WhatsApp bot for farmers with limited smartphone access,CTO,v2,P1,🔲 Backlog
+Simple dashboard,Summary of season so far,CTO,v1,P1,🔲 To do
+Yield prediction,Based on activity + weather data,CTO,v2,P1,🔲 Backlog
+Disease detection,AI-powered crop disease and pest identification,CTO,v3,P2,🔲 Backlog
+Income recorder,"Crop sales, quantity, buyer",CTO,v1,P0,🔲 To do

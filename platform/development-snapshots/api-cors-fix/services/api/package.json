@@ -1,0 +1,31 @@
+{
+  "name": "@agroedge/api",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "AgroEdge Fastify API -- implements the contract in packages/shared/openapi/openapi.yaml.",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.3.0",
+    "@fastify/rate-limit": "^10.2.2",
+    "@supabase/supabase-js": "^2.110.2",
+    "dotenv": "^17.4.2",
+    "fastify": "^5.10.0",
+    "fastify-openapi-glue": "^4.11.3",
+    "fastify-plugin": "^5.1.0",
+    "pino": "^9.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "vitest": "^4.1.10"
+  }
+}

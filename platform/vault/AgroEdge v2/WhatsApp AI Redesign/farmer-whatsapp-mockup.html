@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AgroEdge — Farmer WhatsApp AI Product Mockup</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root{
+    --bg:#0f1712; --panel:#16201a; --panel2:#1c2820;
+    --green:#3fae5a; --green-dark:#2c7a41; --green-light:#7fd996;
+    --wa-out:#005c4b; --wa-in:#202c33; --wa-bg:#0b141a;
+    --text:#eef3ee; --muted:#9db2a4; --line:#28362d;
+    --accent:#e8b34a;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5;}
+  .wrap{max-width:1180px;margin:0 auto;padding:48px 24px 96px;}
+  header.hero{text-align:center;padding:40px 0 56px;}
+  .tag{display:inline-block;padding:6px 14px;border:1px solid var(--green-dark);border-radius:999px;color:var(--green-light);font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px;}
+  h1{font-size:clamp(28px,4vw,44px);margin:0 0 14px;letter-spacing:-0.02em;}
+  h1 span{color:var(--green-light);}
+  .sub{color:var(--muted);max-width:640px;margin:0 auto;font-size:16px;}
+  .pillrow{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:26px;}
+  .pill{background:var(--panel);border:1px solid var(--line);padding:8px 16px;border-radius:10px;font-size:13px;color:var(--muted);}
+  .section-label{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--green-light);margin:64px 0 8px;}
+  .section-title{font-size:24px;margin:0 0 28px;}
+  .phones{display:flex;gap:32px;flex-wrap:wrap;justify-content:center;}
+  .phone{width:320px;background:#000;border-radius:36px;padding:10px;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+  .screen{background:var(--wa-bg);border-radius:26px;overflow:hidden;height:600px;display:flex;flex-direction:column;}
+  .wa-header{background:#1f2c34;padding:14px 16px;display:flex;align-items:center;gap:10px;}
+  .avatar{width:36px;height:36px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:14px;}
+  .wa-header .name{font-size:14px;font-weight:600;}
+  .wa-header .status{font-size:11px;color:var(--green-light);}
+  .chat{flex:1;overflow-y:auto;padding:14px 10px;display:flex;flex-direction:column;gap:8px;background-image:radial-gradient(circle at 20% 10%, rgba(255,255,255,.02) 0, transparent 40%);}
+  .bubble{max-width:80%;padding:8px 11px;border-radius:8px;font-size:13.5px;position:relative;white-space:pre-wrap;}
+  .in{align-self:flex-start;background:var(--wa-in);border-top-left-radius:2px;}
+  .out{align-self:flex-end;background:var(--wa-out);border-top-right-radius:2px;}
+  .bubble .time{display:block;text-align:right;font-size:10px;color:var(--muted);margin-top:4px;}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;align-self:flex-start;margin-left:4px;}
+  .chip{background:var(--wa-in);border:1px solid #2f3b42;color:var(--green-light);font-size:12px;padding:6px 10px;border-radius:16px;}
+  .wa-input{background:#1f2c34;padding:10px 12px;font-size:12px;color:var(--muted);}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;}
+  .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}
+  .grid3 .card h3{margin:0 0 8px;font-size:16px;color:var(--green-light);}
+  .grid3 .card p{margin:0;color:var(--muted);font-size:14px;}
+  .flow{display:flex;flex-wrap:wrap;gap:0;align-items:stretch;justify-content:center;margin-top:8px;}
+  .flow .node{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;width:190px;text-align:center;}
+  .flow .node .k{font-size:11px;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;}
+  .flow .node .t{font-size:14px;font-weight:600;margin-top:6px;}
+  .flow .arrow{display:flex;align-items:center;justify-content:center;color:var(--muted);width:36px;font-size:20px;}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:80px;border-top:1px solid var(--line);padding-top:24px;}
+  @media (max-width:700px){.flow{flex-direction:column;}.flow .arrow{transform:rotate(90deg);width:auto;height:24px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="tag">Farmer product · concept mockup</span>
+    <h1>AgroEdge on <span>WhatsApp</span></h1>
+    <p class="sub">A zero-download AI agronomist and farm data assistant that lives where farmers already are — WhatsApp. No app install, no literacy barrier for typed forms, works on any phone with WhatsApp installed.</p>
+    <div class="pillrow">
+      <div class="pill">Voice notes in local language</div>
+      <div class="pill">Data entry by conversation</div>
+      <div class="pill">AI agronomist on demand</div>
+      <div class="pill">Free to farmer</div>
+    </div>
+  </header>
+
+  <div class="section-label">Product surfaces</div>
+  <div class="section-title">Two WhatsApp agents, one number</div>
+
+  <div class="phones">
+    <div class="phone">
+      <div class="screen">
+        <div class="wa-header">
+          <div class="avatar">AE</div>
+          <div>
+            <div class="name">AgroEdge · Farm Assistant</div>
+            <div class="status">online — AI agent</div>
+          </div>
+        </div>
+        <div class="chat">
+          <div class="bubble in">Dumela! I'm your AgroEdge farm assistant 🌾 What did you plant this season?<span class="time">08:02</span></div>
+          <div class="bubble out">maize, 2 hectares<span class="time">08:03</span></div>
+          <div class="bubble in">Got it — 2 ha maize logged for the 2026 season. When did you plant?<span class="time">08:03</span></div>
+          <div class="bubble out">🎤 voice note (0:14)<span class="time">08:04</span></div>
+          <div class="bubble in">Heard: "planted first week of November". Saved. Want to log input costs too? Just send a photo of your receipt.<span class="time">08:04</span></div>
+          <div class="bubble out">📷 photo — fertilizer receipt<span class="time">08:06</span></div>
+          <div class="bubble in">Logged: Compound D fertilizer, 2 bags, P620. Your running cost total is P1,340 this season.<span class="time">08:06</span></div>
+          <div class="chips">
+            <div class="chip">📊 See my P&L</div>
+            <div class="chip">➕ Log activity</div>
+          </div>
+        </div>
+        <div class="wa-input">Data Intake Agent — writes straight to farm records</div>
+      </div>
+    </div>
+
+    <div class="phone">
+      <div class="screen">
+        <div class="wa-header">
+          <div class="avatar">🌱</div>
+          <div>
+            <div class="name">AgroEdge · Ask the Agronomist</div>
+            <div class="status">online — AI agent</div>
+          </div>
+        </div>
+        <div class="chat">
+          <div class="bubble out">📷 photo — maize leaves with yellow streaks<span class="time">14:12</span></div>
+          <div class="bubble in">This looks like nitrogen deficiency, possibly with early maize streak virus on leaf 3. Based on your soil log, top-dress with 50kg/ha urea this week.<span class="time">14:13</span></div>
+          <div class="bubble out">is it too late to fix?<span class="time">14:14</span></div>
+          <div class="bubble in">No — you're at V6 stage per your planting date, still within the top-dress window. Apply within 5 days for best recovery. Want the nearest agro-dealer with urea in stock?<span class="time">14:14</span></div>
+          <div class="chips">
+            <div class="chip">📍 Nearest dealer</div>
+            <div class="chip">👨🏾‍🌾 Talk to a human</div>
+          </div>
+          <div class="bubble in">Reminder set: I'll check back on 24 July to see how the maize is recovering.<span class="time">14:15</span></div>
+        </div>
+        <div class="wa-input">Agronomist Agent — Claude-powered, grounded in farm history + weather</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">System design</div>
+  <div class="section-title">How a WhatsApp message becomes a farm record</div>
+
+  <div class="flow">
+    <div class="node"><div class="k">01 · Channel</div><div class="t">WhatsApp Cloud API</div></div>
+    <div class="arrow">→</div>
+    <div class="node"><div class="k">02 · Router</div><div class="t">Intake vs. Agronomist intent classifier</div></div>
+    <div class="arrow">→</div>
+    <div class="node"><div class="k">03 · Agent</div><div class="t">Claude tool-use agent</div></div>
+    <div class="arrow">→</div>
+    <div class="node"><div class="k">04 · Action</div><div class="t">Writes to Supabase via API</div></div>
+    <div class="arrow">→</div>
+    <div class="node"><div class="k">05 · Reply</div><div class="t">Confirmation back on WhatsApp</div></div>
+  </div>
+
+  <div class="section-label" style="margin-top:64px;">Why this works for rollout</div>
+  <div class="section-title">Selling the AI service to farmers, not the app</div>
+  <div class="grid3">
+    <div class="card"><h3>No install friction</h3><p>Farmers already have WhatsApp. Onboarding is "save this number," not an app store download and account creation.</p></div>
+    <div class="card"><h3>Voice-first data entry</h3><p>Low-literacy farmers speak instead of typing forms — the intake agent transcribes and structures it.</p></div>
+    <div class="card"><h3>Always-on agronomist</h3><p>Photo a diseased leaf, get a diagnosis grounded in that farmer's own planting and weather history — not generic advice.</p></div>
+    <div class="card"><h3>Same backend, new channel</h3><p>WhatsApp is a channel layer in front of the existing farm-records API and database — the mobile app remains the deeper dashboard for farmers who want it.</p></div>
+  </div>
+
+  <footer>AgroEdge — concept mockup for internal review. Not a built or shipped product. No government or farmer commitments implied.</footer>
+</div>
+</body>
+</html>

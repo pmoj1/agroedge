@@ -1,0 +1,123 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "AgroEdge",
+  "@appTitle": {"description": "App title shown in the browser tab and app bar."},
+
+  "commonSave": "Save",
+  "commonCancel": "Cancel",
+  "commonSignOut": "Sign out",
+  "commonRetry": "Retry",
+  "commonOptional": "Optional",
+  "commonSomethingWentWrong": "Something went wrong. Please try again.",
+
+  "signInTitle": "Sign in to AgroEdge",
+  "signInEmailLabel": "Email",
+  "signInPasswordLabel": "Password",
+  "signInButton": "Sign in",
+  "signInInvalidCredentials": "Incorrect email or password.",
+  "signInGenericError": "Could not sign in. Please try again.",
+
+  "farmSetupTitle": "Set up your farm",
+  "farmSetupIntro": "Tell us a bit about your farm. You only need to do this once.",
+  "farmSetupFarmNameLabel": "Farm name",
+  "farmSetupFarmSizeLabel": "Farm size (hectares)",
+  "farmSetupPrimaryCropLabel": "Primary crop",
+  "farmSetupRegionLabel": "Region",
+  "farmSetupSaveButton": "Save and continue",
+  "farmSetupRequiredField": "This field is required",
+
+  "homeLogActivity": "Log activity",
+  "homeAskAi": "Ask the AI agronomist",
+  "homeRecentActivities": "Recent activity",
+  "homeNoActivitiesYet": "No activity logged yet.",
+  "homeLogExpense": "Log expense",
+  "homeLogIncome": "Log income",
+
+  "homeAiInsightsHeading": "AI insights",
+  "homeCropPlanHeading": "Current crop plan",
+  "homeCropPlanEmpty": "No crop plan yet.",
+  "homeInsightsHeading": "Recent insights",
+  "homeInsightsEmpty": "No insights yet.",
+
+  "homeFinanceChartHeading": "Expenses vs income",
+  "homeFinanceChartSubheading": "Last 6 months",
+  "homeFinanceChartEmpty": "No expenses or income logged yet.",
+  "homeFinanceChartExpenseLabel": "Expenses",
+  "homeFinanceChartIncomeLabel": "Income",
+
+  "activityListItemSubtitle": "{crop} — {date}",
+  "@activityListItemSubtitle": {
+    "placeholders": {
+      "crop": {"type": "String"},
+      "date": {"type": "String"}
+    }
+  },
+
+  "recentActivityActivityTitle": "Activity: {type}",
+  "@recentActivityActivityTitle": {
+    "placeholders": {
+      "type": {"type": "String"}
+    }
+  },
+
+  "recentActivityExpenseTitle": "Expense: {amount}",
+  "@recentActivityExpenseTitle": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "recentActivityExpenseSubtitle": "{category} — {date}",
+  "@recentActivityExpenseSubtitle": {
+    "placeholders": {
+      "category": {"type": "String"},
+      "date": {"type": "String"}
+    }
+  },
+
+  "recentActivityIncomeTitle": "Income: {amount}",
+  "@recentActivityIncomeTitle": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "recentActivityIncomeSubtitle": "{buyer} — {date}",
+  "@recentActivityIncomeSubtitle": {
+    "placeholders": {
+      "buyer": {"type": "String"},
+      "date": {"type": "String"}
+    }
+  },
+
+  "logActivityTitle": "Log activity",
+  "logActivityTypeLabel": "Activity type",
+  "logActivityCropLabel": "Crop",
+  "logActivityDateLabel": "Date",
+  "logActivityNotesLabel": "Notes",
+  "logActivityYieldQuantityLabel": "Yield quantity",
+  "logActivityYieldUnitLabel": "Yield unit",
+  "logActivitySavedConfirmation": "Activity logged.",
+
+  "logExpenseTitle": "Log expense",
+  "logExpenseAmountLabel": "Amount",
+  "logExpenseCategoryLabel": "Category",
+  "logExpenseDateLabel": "Date",
+  "logExpenseNotesLabel": "Notes",
+  "logExpenseSavedConfirmation": "Expense logged.",
+
+  "logIncomeTitle": "Log income",
+  "logIncomeCropLabel": "Crop",
+  "logIncomeBuyerLabel": "Buyer",
+  "logIncomeDateLabel": "Date",
+  "logIncomePricePerUnitLabel": "Price per unit",
+  "logIncomeQuantitySoldLabel": "Quantity sold",
+  "logIncomeTotalRevenueLabel": "Total revenue",
+  "logIncomeSavedConfirmation": "Income logged.",
+
+  "aiChatTitle": "AI agronomist",
+  "aiChatComingSoonTitle": "Coming soon",
+  "aiChatComingSoonBody": "The AI agronomist chat is not connected yet. This screen will let you ask questions about your farm once it's ready.",
+
+  "validationRequired": "Required",
+  "validationMustBeNumber": "Must be a number"
+}

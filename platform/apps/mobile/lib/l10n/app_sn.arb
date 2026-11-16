@@ -1,0 +1,80 @@
+{
+  "@@locale": "sn",
+
+  "appTitle": "AgroEdge",
+  "commonSave": "Chengetedza",
+  "commonCancel": "Dzima",
+  "commonSignOut": "Buda",
+  "commonRetry": "Edza zvakare",
+  "commonOptional": "Hazvibatanidzwi",
+  "commonSomethingWentWrong": "Pane chakakanganisika. Ndapota edza zvakare.",
+
+  "signInTitle": "Pinda mu AgroEdge",
+  "signInEmailLabel": "Imeri",
+  "signInPasswordLabel": "Pasiwedhi",
+  "signInButton": "Pinda",
+  "signInInvalidCredentials": "Imeri kana pasiwedhi hazvina kunaka.",
+  "signInGenericError": "Hapana. Ndapota edza zvakare.",
+
+  "farmSetupTitle": "Gadzirira purazi rako",
+  "farmSetupIntro": "Tiudze nezve purazi rako. Unofanira kuita izvi kamwe chete.",
+  "farmSetupFarmNameLabel": "Zita repurazi",
+  "farmSetupFarmSizeLabel": "Kukura kwepurazi (mahekita)",
+  "farmSetupPrimaryCropLabel": "Mbesa yekutanga",
+  "farmSetupRegionLabel": "Dunhu",
+  "farmSetupSaveButton": "Chengetedza uendelee",
+  "farmSetupRequiredField": "Nzvimbo iyi inodiwa",
+
+  "homeLogActivity": "Nyora mabasa",
+  "homeAskAi": "Bvunza mudzidzisi weAI",
+  "homeRecentActivities": "Mabasa ekupedzisira",
+  "homeNoActivitiesYet": "Hapana mabasa akanyorwa.",
+  "homeLogExpense": "Nyora chakakosha",
+  "homeLogIncome": "Nyora mari yakawana",
+
+  "homeAiInsightsHeading": "Zano reAI",
+  "homeCropPlanHeading": "Chirongwa chemhuri",
+  "homeCropPlanEmpty": "Hapana chirongwa chemhuri.",
+  "homeInsightsHeading": "Mazano ekupedzisira",
+  "homeInsightsEmpty": "Hapana mazano.",
+
+  "activityListItemSubtitle": "{crop} — {date}",
+  "@activityListItemSubtitle": {
+    "placeholders": {
+      "crop": {"type": "String"},
+      "date": {"type": "String"}
+    }
+  },
+
+  "logActivityTitle": "Nyora mabasa",
+  "logActivityTypeLabel": "Rudzi rwemabasa",
+  "logActivityCropLabel": "Mbesa",
+  "logActivityDateLabel": "Zuva",
+  "logActivityNotesLabel": "Manotsi",
+  "logActivityYieldQuantityLabel": "Huwandu hwemhuri",
+  "logActivityYieldUnitLabel": "Chiyero chemhuri",
+  "logActivitySavedConfirmation": "Mabasa enyorwa.",
+
+  "logExpenseTitle": "Nyora chakakosha",
+  "logExpenseAmountLabel": "Huwandu",
+  "logExpenseCategoryLabel": "Chikamu",
+  "logExpenseDateLabel": "Zuva",
+  "logExpenseNotesLabel": "Manotsi",
+  "logExpenseSavedConfirmation": "Chakakosha chenyorwa.",
+
+  "logIncomeTitle": "Nyora mari yakawana",
+  "logIncomeCropLabel": "Mbesa",
+  "logIncomeBuyerLabel": "Mutengi",
+  "logIncomeDateLabel": "Zuva",
+  "logIncomePricePerUnitLabel": "Mutengo pachiyero",
+  "logIncomeQuantitySoldLabel": "Huwandu hwakatengeswa",
+  "logIncomeTotalRevenueLabel": "Mari yose yakawana",
+  "logIncomeSavedConfirmation": "Mari yakanyorwa.",
+
+  "aiChatTitle": "Mudzidzisi weAI",
+  "aiChatComingSoonTitle": "Kuuya nekukurumidza",
+  "aiChatComingSoonBody": "Mudzidzisi weAI achauya nekukurumidza.",
+
+  "validationRequired": "Inodiwa",
+  "validationMustBeNumber": "Inofanira kuve nhamba"
+}

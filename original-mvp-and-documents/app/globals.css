@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body { @apply bg-canvas text-ink font-body antialiased; }
+
+.card { @apply bg-card border border-line rounded-xl shadow-card; }
+.pill { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-semibold; }
+.pill-green { @apply pill bg-leaf text-white; }
+.pill-gold { @apply pill bg-gold text-white; }
+.pill-soft-gold { @apply pill bg-gold-soft text-gold-deep; }
+.pill-soft-green { @apply pill bg-leaf-soft text-leaf-deep; }
+.stat-label { @apply text-xs text-sub; }
+.section-title { @apply font-display text-lg font-semibold; }
+.btn-green { @apply inline-flex items-center gap-2 rounded-lg bg-leaf text-white text-sm font-medium px-4 py-2 hover:bg-leaf-deep transition-colors; }
+.btn-ghost { @apply inline-flex items-center rounded-lg border border-line bg-white text-sm px-3 py-1.5 hover:bg-canvas transition-colors; }
+input, select, textarea { @apply outline-none; }

@@ -1,0 +1,80 @@
+{
+  "@@locale": "fr",
+
+  "appTitle": "AgroEdge",
+  "commonSave": "Enregistrer",
+  "commonCancel": "Annuler",
+  "commonSignOut": "Se déconnecter",
+  "commonRetry": "Réessayer",
+  "commonOptional": "Optionnel",
+  "commonSomethingWentWrong": "Une erreur s'est produite. Veuillez réessayer.",
+
+  "signInTitle": "Connexion à AgroEdge",
+  "signInEmailLabel": "Email",
+  "signInPasswordLabel": "Mot de passe",
+  "signInButton": "Se connecter",
+  "signInInvalidCredentials": "Email ou mot de passe incorrect.",
+  "signInGenericError": "Impossible de se connecter. Veuillez réessayer.",
+
+  "farmSetupTitle": "Configurer votre ferme",
+  "farmSetupIntro": "Parlez-nous de votre ferme. Vous ne devez le faire qu'une seule fois.",
+  "farmSetupFarmNameLabel": "Nom de la ferme",
+  "farmSetupFarmSizeLabel": "Superficie (hectares)",
+  "farmSetupPrimaryCropLabel": "Culture principale",
+  "farmSetupRegionLabel": "Région",
+  "farmSetupSaveButton": "Enregistrer et continuer",
+  "farmSetupRequiredField": "Ce champ est obligatoire",
+
+  "homeLogActivity": "Enregistrer une activité",
+  "homeAskAi": "Consulter l'agronome IA",
+  "homeRecentActivities": "Activités récentes",
+  "homeNoActivitiesYet": "Aucune activité enregistrée.",
+  "homeLogExpense": "Enregistrer une dépense",
+  "homeLogIncome": "Enregistrer un revenu",
+
+  "homeAiInsightsHeading": "Insights IA",
+  "homeCropPlanHeading": "Plan de culture actuel",
+  "homeCropPlanEmpty": "Aucun plan de culture.",
+  "homeInsightsHeading": "Insights récents",
+  "homeInsightsEmpty": "Aucun insight.",
+
+  "activityListItemSubtitle": "{crop} — {date}",
+  "@activityListItemSubtitle": {
+    "placeholders": {
+      "crop": {"type": "String"},
+      "date": {"type": "String"}
+    }
+  },
+
+  "logActivityTitle": "Enregistrer une activité",
+  "logActivityTypeLabel": "Type d'activité",
+  "logActivityCropLabel": "Culture",
+  "logActivityDateLabel": "Date",
+  "logActivityNotesLabel": "Notes",
+  "logActivityYieldQuantityLabel": "Quantité de rendement",
+  "logActivityYieldUnitLabel": "Unité de rendement",
+  "logActivitySavedConfirmation": "Activité enregistrée.",
+
+  "logExpenseTitle": "Enregistrer une dépense",
+  "logExpenseAmountLabel": "Montant",
+  "logExpenseCategoryLabel": "Catégorie",
+  "logExpenseDateLabel": "Date",
+  "logExpenseNotesLabel": "Notes",
+  "logExpenseSavedConfirmation": "Dépense enregistrée.",
+
+  "logIncomeTitle": "Enregistrer un revenu",
+  "logIncomeCropLabel": "Culture",
+  "logIncomeBuyerLabel": "Acheteur",
+  "logIncomeDateLabel": "Date",
+  "logIncomePricePerUnitLabel": "Prix par unité",
+  "logIncomeQuantitySoldLabel": "Quantité vendue",
+  "logIncomeTotalRevenueLabel": "Revenu total",
+  "logIncomeSavedConfirmation": "Revenu enregistré.",
+
+  "aiChatTitle": "Agronome IA",
+  "aiChatComingSoonTitle": "Bientôt disponible",
+  "aiChatComingSoonBody": "L'agronome IA sera bientôt disponible.",
+
+  "validationRequired": "Obligatoire",
+  "validationMustBeNumber": "Doit être un nombre"
+}

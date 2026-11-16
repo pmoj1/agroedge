@@ -1,0 +1,14 @@
+﻿Task,Due,Owner,Priority,Sprint,Status
+Build farmer onboarding flow,,CTO,P0,1,🔲 To do
+Set up Supabase (auth + database),,CTO,P0,1,🔲 To do
+Build activity logger (CRUD),,CTO,P0,2,🔲 To do
+Set up GitHub repo + project structure,,CTO,P0,1,🔲 To do
+"Define data models (Farmers, Activities, Expenses, Income)",,CTO,P0,1,🔲 To do
+Build simple farmer dashboard,,CTO,P1,2,🔲 To do
+Write MVP one-pager for pilot partners,,CEO,P0,1,🔲 To do
+Build expense + income tracker,,CTO,P0,2,🔲 To do
+Draft investor cold email template,,CEO,P1,3,🔲 To do
+Set up Africa's Talking SMS account,,CTO,P1,3,🔲 To do
+Identify 3 pilot partner organisations,,CEO,P1,2,🔲 To do
+Design first AI insight prompt,,Both,P0,2,🔲 To do
+Conduct 5 farmer interviews,,CEO,P0,1,🔲 To do

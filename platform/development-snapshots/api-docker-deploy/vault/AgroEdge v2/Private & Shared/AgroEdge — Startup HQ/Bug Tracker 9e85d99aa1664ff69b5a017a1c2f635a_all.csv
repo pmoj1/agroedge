@@ -1,0 +1,9 @@
+﻿Bug,#,Fixed in,Reported by,Severity,Status
+Bug #2,2,,,,🔲 Open
+Bug #1,1,,,,🔲 Open
+"Net profit shows 0 on Analytics + blank P&L statement (dashboard shows 3,063,300)",1,,Spotted in preview screenshots,High,🔲 Open
+"'Finish setting up your farm profile' banner still showing although profile has data (20 acres, crops)",5,,Spotted in preview screenshots,Low,🔲 Open
+Yield per acre shows 0 on Analytics (total harvest ÷ farm size not computing despite yields logged),2,,Spotted in preview screenshots,Medium,🔲 Open
+AI Assistant suggested-question chips still show placeholder '...edit me...' text,6,,Spotted in preview screenshots,Low,🔲 Open
+Dashboard Farm health score card shows /100 with no number (sidebar shows 78/100),4,,Spotted in preview screenshots,Medium,🔲 Open
+Break-even summary shows unrounded value (2330.4347826087...) — needs rounding/formatting,3,,Spotted in preview screenshots,Low,🔲 Open
